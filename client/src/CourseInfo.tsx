@@ -3,7 +3,15 @@ import circuits from "./assets/circuits.jpg"
 import maths from "./assets/maths-fundamentals.jpg"
 import finance from "./assets/finance.jpg"
 import mech from "./assets/mech.jpg"
-import React, { useState } from "react"
+import { useState } from "react"
+import { TabNavItem } from "./TabNavItem"
+import { TabContent } from "./TabContent"
+import { Home } from "./Home"
+import { Material } from "./Material"
+import { Assignment } from "./Assignment"
+import { Query } from "./Query"
+import { Certificate } from "./Certificate"
+import { Review } from "./Review"
 
 type CourseInfoProps = {
     id: number
@@ -52,61 +60,47 @@ const data : CourseData[] = [
 
 export function CourseInfo({ id }: CourseInfoProps) {
     
+    type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "review"
+
     const requiredCourse = data.find((course) => course.id === id)
-    const [activeTab, setActiveTab] = useState("tab1")
+    const [activeTab, setActiveTab] = useState<CourseTab>("home")
 
     return (
-        <React.Fragment>
+        <div className="px-8 py-2">
             <h1 
                 className="mt-4 pb-8 text-5xl font-bold text-slate-900">
                 {requiredCourse?.title}
             </h1>
             <p className="mb-8 text-slate-700">{requiredCourse?.description}</p>
             <div className="tabs items-center justify-evenly tabs-boxed">
-                <a 
-                    className={`tab tab-lg
-                    ${activeTab === "tab1" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("tab1")}
-                >
-                    Home
-                </a> 
-                <a 
-                    className={`tab tab-lg
-                    ${activeTab === "tab2" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("tab2")}
-                >
-                    Course Material
-                </a> 
-                <a 
-                    className={`tab tab-lg
-                    ${activeTab === "tab3" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("tab3")}
-                >
-                    Assignments
-                </a>
-                <a 
-                    className={`tab tab-lg
-                    ${activeTab === "tab4" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("tab4")}
-                >
-                    Queries
-                </a> 
-                <a 
-                    className={`tab tab-lg
-                    ${activeTab === "tab5" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("tab5")}
-                >
-                    Certificate
-                </a>
-                <a 
-                    className={`tab tab-lg
-                    ${activeTab === "tab6" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("tab6")}
-                >
-                    Write a Review
-                </a>   
+                <TabNavItem tabType="home" tabTitle="Home" activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavItem tabType="material" tabTitle="Course Material" activeTab={activeTab} setActiveTab={setActiveTab} /> 
+                <TabNavItem tabType="assignment" tabTitle="Assignments" activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavItem tabType="query" tabTitle="Queries" activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavItem tabType="certificate" tabTitle="Certificate" activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavItem tabType="review" tabTitle="Write a Review" activeTab={activeTab} setActiveTab={setActiveTab} />   
             </div>
-        </React.Fragment>
+            <div className="outlet">
+                <TabContent tabType="home" activeTab={activeTab}>
+                    <Home />
+                </TabContent>
+                <TabContent tabType="material" activeTab={activeTab}>
+                    <Material />
+                </TabContent>
+                <TabContent tabType="assignment" activeTab={activeTab}>
+                    <Assignment />
+                </TabContent>
+                <TabContent tabType="query" activeTab={activeTab}>
+                    <Query />
+                </TabContent>
+                <TabContent tabType="certificate" activeTab={activeTab}>
+                    <Certificate title={requiredCourse?.title} />
+                </TabContent>
+                <TabContent tabType="review" activeTab={activeTab}>
+                    <Review />
+                </TabContent>
+            </div>
+        </div>
     )
 
 }
