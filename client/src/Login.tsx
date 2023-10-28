@@ -1,7 +1,40 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 export function Login() {
+    const navigate = useNavigate();    
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [userData, setUserData] = useState({});
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+        const user = { email, password };
+        try {
+            const response = await fetch(
+                'http://localhost:8080/api/user/validateLogin', 
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type' : 'application/json'},
+                    body: JSON.stringify({
+                        email: user.email,
+                        password: user.password
+                    })
+                }
+            )
+            const responseData = await response.json();
+            if (responseData !== null) {
+                console.log(responseData);
+                setUserData(responseData);
+                navigate("/");
+            } else {
+                console.log('User login failed');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return(
         <React.Fragment>
            <div className="absolute bg-gradient-to-b from-primary to-secondary bg-opacity-75 inset-0 z-0">
@@ -12,6 +45,7 @@ export function Login() {
                             <p className="pr-3">
                                 Unlock a world of knowledge with just a few clicks. 
                                 Your educational journey begins here. Dive into a world of possibilities.
+
                             </p>
                         </div>
                     </div>
@@ -21,18 +55,30 @@ export function Login() {
                                 <h3 className="font-semibold text-2xl text-gray-800">Sign In </h3>
                                 <p className="text-gray-500">Please login in to your account.</p>
                             </div>
-                            <div className="space-y-5">
+                            <form className="space-y-5" onSubmit={handleSubmit}>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-700 tracking-wide">
                                         Email
                                     </label>
-                                    <input className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-secondary" type="email" placeholder="mail@gmail.com" />
+                                    <input 
+                                        className=" w-full text-base px-4 py-2 border border-gray-300 
+                                        rounded-lg focus:outline-none focus:border-secondary" 
+                                        type="email" 
+                                        placeholder="mail@gmail.com"
+                                        onChange={(event) => setEmail(event.target.value)} 
+                                    />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="mb-5 text-sm font-medium text-gray-700 tracking-wide">
                                         Password
                                     </label>
-                                    <input className="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-secondary" type="password" placeholder="Enter your password" />
+                                    <input 
+                                        className="w-full content-center text-base px-4 py-2 border border-gray-300 
+                                        rounded-lg focus:outline-none focus:border-secondary" 
+                                        type="password" 
+                                        placeholder="Enter your password"
+                                        onChange={(event) => setPassword(event.target.value)} 
+                                    />
                                 </div>
                                 <div className="flex flex-col gap-4 items-center">
                                     <button type="submit" className="w-full flex justify-center bg-secondary hover:bg-secondary-focus text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
@@ -40,7 +86,7 @@ export function Login() {
                                     </button>
                                     <Link to="/" className="link link-hover link-secondary">Go to Home</Link>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
