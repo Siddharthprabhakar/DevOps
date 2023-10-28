@@ -1,17 +1,21 @@
-import React from "react"
 import programming from "./assets/programming.jpg"
 import circuits from "./assets/circuits.jpg"
 import maths from "./assets/maths-fundamentals.jpg"
 import finance from "./assets/finance.jpg"
 import mech from "./assets/mech.jpg"
-import { CourseCard } from "./CourseCard"
+import React from "react"
+
+type CourseInfoProps = {
+    id: number
+};
 
 type CourseData = {
     id: number,
     image: string,
     title: string,
     description: string,
-}
+};
+
 /* TODO: read from Course Table */
 const data : CourseData[] = [
     {
@@ -45,24 +49,18 @@ const data : CourseData[] = [
         description: "Introduction to mechanical engineering",
     },
 ]
-export function Catalog() {
-    return(
+
+export function CourseInfo({ id }: CourseInfoProps) {
+    
+    const requiredCourse = data.find((course) => course.id === id)
+    return (
         <React.Fragment>
-            <div className="mt-8 flex items-center justify-center">
-                <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row-dense gap-8">
-                    {data.map(
-                        (course : CourseData)  => (
-                            <CourseCard
-                                id={course.id}
-                                image={course.image}
-                                title={course.title}
-                                description={course.description}
-                            />
-                            )
-                        )
-                    } 
-                </div>
-            </div>
+            <h1 
+                className="mt-4 pb-8 text-5xl font-bold text-slate-900">
+                {requiredCourse?.title}
+            </h1>
+            <p className="mb-8 text-slate-700">{requiredCourse?.description}</p>
         </React.Fragment>
     )
+
 }

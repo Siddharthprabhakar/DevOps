@@ -11,6 +11,7 @@ import {
 import { Catalog } from './Catalog.tsx'
 import { Login } from './Login.tsx'
 import { Signup } from './Signup.tsx'
+import { CourseContainer } from './CourseContainer.tsx'
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />
+      },
+      {
+        path:"/course/:id",
+        element: <CourseContainer />
       }
     ]
   },
