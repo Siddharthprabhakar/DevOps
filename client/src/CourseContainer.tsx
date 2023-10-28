@@ -8,7 +8,7 @@ export function CourseContainer() {
     
     return (
         <React.Fragment>
-            <div className="absolute bg-gradient-to-b from-primary to-secondary bg-opacity-75 inset-0 z-0">
+            <div className="absolute bg-gradient-to-t from-primary-content to-secondary-content bg-opacity-75 inset-0 z-0">
                 <div className="flex justify-center self-center z-10 h-full w-full">
                     <div className="p-2 bg-white mx-auto rounded-2xl w-3/4">
                         <CourseInfo id={courseId} />
