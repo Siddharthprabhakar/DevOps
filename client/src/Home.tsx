@@ -7,7 +7,7 @@ type HomeProps = {
 }
 
 type ReviewData = {
-    date: Date,
+    date_of_review: Date,
     description: string,
     rating: number,
 }
@@ -16,6 +16,7 @@ export function Home({ instructorName, category} : HomeProps) {
     const [reviewData, setReviewData] = useState<ReviewData[]>();
     const location = useLocation();
     const courseId: number = parseInt(location.pathname.slice(-1));
+
     useEffect( () => {
         async function fetchAllReviews() : Promise<any> {
             try {
@@ -44,6 +45,7 @@ export function Home({ instructorName, category} : HomeProps) {
         fetchAllReviews();
     }, []);
 
+    console.log();
     return(
         <div>
             <p className="text-2xl mb-2">Course Instructor</p>
@@ -68,7 +70,7 @@ export function Home({ instructorName, category} : HomeProps) {
                             </div>
                             <div className="text-primary">{review.rating}.0</div>
                         </h2>
-                        <p>Date of Review: {review.date?.toString()}</p>
+                        <p>Date of Review: {new Date(review.date_of_review).toDateString()}</p>
                         <p>{review.description}</p>
                     </div>
                 </div>
