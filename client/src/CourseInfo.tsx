@@ -1,9 +1,4 @@
-import programming from "./assets/programming.jpg"
-import circuits from "./assets/circuits.jpg"
-import maths from "./assets/maths-fundamentals.jpg"
-import finance from "./assets/finance.jpg"
-import mech from "./assets/mech.jpg"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { TabNavItem } from "./TabNavItem"
 import { TabContent } from "./TabContent"
 import { Home } from "./Home"
@@ -14,64 +9,62 @@ import { Certificate } from "./Certificate"
 import { Review } from "./Review"
 
 type CourseInfoProps = {
-    id: number
+    courseId: number
 };
 
-type CourseData = {
-    id: number,
-    image: string,
+type CourseInfoData = {
     title: string,
     description: string,
-};
+    instructorName: string,
+    category: string,
+}; 
 
-/* TODO: read from Course Table */
-const data : CourseData[] = [
-    {
-        id: 1,
-        image: programming,
-        title: "Computer Programming",
-        description: "Learn programming in C++",
-    },
-    {
-        id: 2,
-        image: circuits,
-        title: "Electrical Circuits",
-        description: "Understanding circuit analysis",
-    },
-    {
-        id: 3,
-        image: maths,
-        title: "Mathematics Fundamentals",
-        description: "Basic mathematical concepts",
-    },
-    {
-        id: 4,
-        image: finance,
-        title: "Finance for Beginners",
-        description: "Introduction to financial concepts",
-    },
-    {
-        id: 5,
-        image: mech,
-        title: "Mechanical Engineering Basics",
-        description: "Introduction to mechanical engineering",
-    },
-]
+export function CourseInfo({ courseId }: CourseInfoProps) {
+    const [courseInfo, setCourseInfo] = useState<CourseInfoData>();
+    useEffect(() => {
+        async function fetchCourseInfo() : Promise<any> {
+            try {
+                const response = await fetch(
+                    `http://localhost:8080/api/course/getCourseInfo`, 
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type' : 'application/json'},
+                        body: JSON.stringify({
+                            id: courseId
+                        })
+                    }
+                )
 
-export function CourseInfo({ id }: CourseInfoProps) {
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    setCourseInfo({
+                        title: responseData.course_title,
+                        description: responseData.course_description,
+                        instructorName: responseData.instructor_name,
+                        category: responseData.category_name,
+                    });
+                } else {
+                    console.error('Course info fetching failed');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchCourseInfo();
+    }, []);
+    
     
     type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "review"
 
-    const requiredCourse = data.find((course) => course.id === id)
     const [activeTab, setActiveTab] = useState<CourseTab>("home")
 
     return (
         <div className="px-8 py-2">
             <h1 
                 className="mt-4 pb-8 text-5xl font-bold text-slate-900">
-                {requiredCourse?.title}
+                {courseInfo?.title}
             </h1>
-            <p className="mb-8 text-slate-700">{requiredCourse?.description}</p>
+            <p className="mb-8 text-slate-700">{courseInfo?.description}</p>
             <div className="tabs items-center justify-evenly tabs-boxed">
                 <TabNavItem tabType="home" tabTitle="Home" activeTab={activeTab} setActiveTab={setActiveTab} />
                 <TabNavItem tabType="material" tabTitle="Course Material" activeTab={activeTab} setActiveTab={setActiveTab} /> 
@@ -82,7 +75,7 @@ export function CourseInfo({ id }: CourseInfoProps) {
             </div>
             <div className="outlet">
                 <TabContent tabType="home" activeTab={activeTab}>
-                    <Home />
+                    <Home instructorName={courseInfo?.instructorName} category={courseInfo?.category}/>
                 </TabContent>
                 <TabContent tabType="material" activeTab={activeTab}>
                     <Material />
@@ -94,7 +87,7 @@ export function CourseInfo({ id }: CourseInfoProps) {
                     <Query />
                 </TabContent>
                 <TabContent tabType="certificate" activeTab={activeTab}>
-                    <Certificate title={requiredCourse?.title} />
+                    <Certificate title="Test Title" />
                 </TabContent>
                 <TabContent tabType="review" activeTab={activeTab}>
                     <Review />

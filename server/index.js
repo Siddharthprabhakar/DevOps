@@ -6,6 +6,7 @@ import cors from 'cors';
 /* Importing all routers*/
 import courseRouter from './routes/course.routes.js';
 import userRouter from './routes/user.routes.js';
+import reviewRouter from './routes/review.routes.js'
 
 /* Configuring our environment */
 dotenv.config();
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/course", courseRouter);
 app.use("/api/user", userRouter);
+app.use("/api/review", reviewRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
