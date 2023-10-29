@@ -6,7 +6,10 @@ import cors from 'cors';
 /* Importing all routers*/
 import courseRouter from './routes/course.routes.js';
 import userRouter from './routes/user.routes.js';
-import reviewRouter from './routes/review.routes.js'
+import reviewRouter from './routes/review.routes.js';
+import materialRouter from './routes/material.routes.js';
+import assignmentRouter from './routes/assignment.routes.js';
+import queryRouter from './routes/query.routes.js';
 
 /* Configuring our environment */
 dotenv.config();
@@ -24,6 +27,9 @@ app.get("/", (req, res) => {
 app.use("/api/course", courseRouter);
 app.use("/api/user", userRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/material", materialRouter);
+app.use("/api/assignment", assignmentRouter);
+app.use("/api/query", queryRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

@@ -45,7 +45,6 @@ export function Home({ instructorName, category} : HomeProps) {
         fetchAllReviews();
     }, []);
 
-    console.log();
     return(
         <div>
             <p className="text-2xl mb-2">Course Instructor</p>

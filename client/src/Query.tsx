@@ -1,33 +1,50 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 type QueryData = {
     date: Date,
     description: string,
 }
 
-const data: QueryData[] = [
-    {
-      date: new Date(2023, 10, 1),
-      description: "Query regarding the first module content.",
-    },
-    {
-      date: new Date(2023, 10, 15),
-      description: "Seeking clarification on assignment deadlines.",
-    },
-    {
-      date: new Date(2023, 11, 5),
-      description: "Question about the final project requirements.",
-    },
-];
-
 export function Query() {
+    const [ queryData, setQueryData ] = useState<QueryData[]>();
+    const location = useLocation();
+    const courseId: number = parseInt(location.pathname.slice(-1));
+    useEffect( () => {
+        async function fetchAllQueries() : Promise<any> {
+            try {
+                const response = await fetch('http://localhost:8080/api/query/getAllQueries', 
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type' : 'application/json'},
+                        body: JSON.stringify({
+                            id: courseId
+                        })
+                    }
+                )
+
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    setQueryData(responseData);
+                    
+                } else {
+                    console.error('Query fetching failed');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchAllQueries();
+    }, []);
     return(
         <div>
-            {data.map((query: QueryData, index) => (
+            {queryData?.map((query: QueryData, index) => (
                 <div key={index} className="card card-side bg-base-100 shadow-xl my-5">
                     <div className="card-body">
                         <h2 className="card-title">
                             <div className="text-primary">Query {index + 1}</div>
                         </h2>
-                        <p>Date of Query: {query.date.toString()}</p>
+                        <p>Date of Query: {new Date(query.date).toDateString()}</p>
                         <p>{query.description}</p>
                     </div>
                 </div>
