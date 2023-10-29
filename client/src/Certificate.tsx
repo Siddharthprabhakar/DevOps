@@ -11,6 +11,9 @@ type CertificateData = {
   
 
 export function Certificate() {
+    // Retrieve user details from localStorage
+    const storedUserString = sessionStorage.getItem("user");
+    const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
     const [ certData, setCertData ] = useState<CertificateData>();
     const location = useLocation();
     const courseId: number = parseInt(location.pathname.slice(-1));
@@ -28,16 +31,28 @@ export function Certificate() {
                 )
 
                 if (response.status === 200) {
+                    console.log(storedUser);
                     const responseData = await response.json();
-                    setCertData({
-                        courseTitle: responseData.course_title,
-                        studentName: "TODO: Change to login user",
-                        issueDate: responseData.issue_date,
-                        instructorName: responseData.instructor_name,
-                        certificateID: responseData.certificate_id,
-                    });
-                    
-                } else {
+                    if (storedUser) {
+                        setCertData({
+                            courseTitle: responseData.course_title,
+                            studentName: storedUser.name,
+                            issueDate: responseData.issue_date,
+                            instructorName: responseData.instructor_name,
+                            certificateID: responseData.certificate_id,
+                        });
+                    }
+                    else {
+                        setCertData({
+                            courseTitle: responseData.course_title,
+                            studentName: "Not Logged In!",
+                            issueDate: responseData.issue_date,
+                            instructorName: responseData.instructor_name,
+                            certificateID: responseData.certificate_id,
+                        });
+                    }
+                } 
+                else {
                     console.error('Query fetching failed');
                 }
             } catch (error) {

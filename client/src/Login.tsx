@@ -5,7 +5,6 @@ export function Login() {
     const navigate = useNavigate();    
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [userData, setUserData] = useState({});
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -25,7 +24,8 @@ export function Login() {
             const responseData = await response.json();
             if (responseData !== null) {
                 console.log(responseData);
-                setUserData(responseData);
+                // Store the user object in localStorage
+                sessionStorage.setItem("user", JSON.stringify(responseData));
                 navigate("/");
             } else {
                 console.log('User login failed');
