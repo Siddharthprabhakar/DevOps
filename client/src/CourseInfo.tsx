@@ -8,6 +8,9 @@ import { Query } from "./Query"
 import { Certificate } from "./Certificate"
 import { ReviewForm } from "./ReviewForm"
 import { QueryForm } from "./QueryForm"
+import React from "react"
+import { AssignmentForm } from "./AssignmentForm"
+import { MaterialForm } from "./MaterialForm"
 
 type CourseInfoProps = {
     courseId: number
@@ -24,12 +27,17 @@ export type EnrollProps = {
     isEnrolled: boolean | undefined
 }
 
+export type TeachProps = {
+    isTeaching: boolean | undefined
+}
+
 export function CourseInfo({ courseId }: CourseInfoProps) {
     // Retrieve user details from localStorage
     const storedUserString = sessionStorage.getItem("user");
     const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
     const [ courseInfo, setCourseInfo ] = useState<CourseInfoData>();
     const [ isEnrolled, setIsEnrolled ] = useState<boolean>();
+    const [ isTeaching, setIsTeaching ] = useState<boolean>();
     useEffect(() => {
         async function fetchCourseInfo() : Promise<any> {
             try {
@@ -75,7 +83,10 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
 
                 if (response.status === 200) {
                     const responseData = await response.json();
-                    setIsEnrolled(responseData)
+                    if(storedUser.rolename == "student")
+                        setIsEnrolled(responseData)
+                    else
+                        setIsEnrolled(true)
                 } else {
                     console.error('Enrollment info fetching failed');
                 }
@@ -83,12 +94,40 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
                 console.log(error);
             }
         }
+        async function isInstructorTeaching() : Promise<any> {
+            try {
+                const response = await fetch(
+                    `http://localhost:8080/api/course/isInstructorTeaching`, 
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type' : 'application/json'},
+                        body: JSON.stringify({
+                            courseid: courseId,
+                            instructorid: storedUser.roleid,
+                        })
+                    }
+                )
+
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    if(storedUser.rolename == "instructor")
+                        setIsTeaching(responseData)
+                    else
+                        setIsTeaching(true)
+                } else {
+                    console.error('Teachin info fetching failed');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
         fetchCourseInfo();
         isStudentEnrolled();
+        isInstructorTeaching();
     }, []);
     
     
-    type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "reviewform" | "queryform"
+    type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "reviewform" | "queryform" | "assignmentform" | "materialform"
 
     const [activeTab, setActiveTab] = useState<CourseTab>("home")
 
@@ -104,9 +143,18 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
                 <TabNavItem tabType="material" tabTitle="Course Material" activeTab={activeTab} setActiveTab={setActiveTab} /> 
                 <TabNavItem tabType="assignment" tabTitle="Assignments" activeTab={activeTab} setActiveTab={setActiveTab} />
                 <TabNavItem tabType="query" tabTitle="Queries" activeTab={activeTab} setActiveTab={setActiveTab} />
-                <TabNavItem tabType="certificate" tabTitle="Certificate" activeTab={activeTab} setActiveTab={setActiveTab} />
-                <TabNavItem tabType="reviewform" tabTitle="Write a Review" activeTab={activeTab} setActiveTab={setActiveTab} />
-                <TabNavItem tabType="queryform" tabTitle="Write a Query" activeTab={activeTab} setActiveTab={setActiveTab} />   
+                {storedUser?.rolename == "instructor" ? (
+                    <React.Fragment>
+                        <TabNavItem tabType="assignmentform" tabTitle="Upload Course Assignment" activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <TabNavItem tabType="materialform" tabTitle="Upload Course Material" activeTab={activeTab} setActiveTab={setActiveTab} />
+                    </React.Fragment>
+                ) : (
+                    <React.Fragment>
+                        <TabNavItem tabType="certificate" tabTitle="Certificate" activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <TabNavItem tabType="reviewform" tabTitle="Write a Review" activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <TabNavItem tabType="queryform" tabTitle="Write a Query" activeTab={activeTab} setActiveTab={setActiveTab} />
+                    </React.Fragment>
+                )}  
             </div>
             <div className="outlet">
                 <TabContent tabType="home" activeTab={activeTab}>
@@ -124,12 +172,25 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
                 <TabContent tabType="certificate" activeTab={activeTab}>
                     <Certificate isEnrolled={isEnrolled} />
                 </TabContent>
-                <TabContent tabType="reviewform" activeTab={activeTab}>
-                    <ReviewForm isEnrolled={isEnrolled} />
-                </TabContent>
-                <TabContent tabType="queryform" activeTab={activeTab}>
-                    <QueryForm isEnrolled={isEnrolled} />
-                </TabContent>
+                {storedUser?.rolename == "instructor" ? (
+                    <React.Fragment>
+                        <TabContent tabType="assignmentform" activeTab={activeTab}>
+                            <AssignmentForm  isTeaching={isTeaching} />
+                        </TabContent>
+                        <TabContent tabType="materialform" activeTab={activeTab}>
+                            <MaterialForm isTeaching={isTeaching} />
+                        </TabContent>
+                    </React.Fragment>
+                ): (
+                    <React.Fragment>
+                        <TabContent tabType="reviewform" activeTab={activeTab}>
+                            <ReviewForm isEnrolled={isEnrolled} />
+                        </TabContent>
+                        <TabContent tabType="queryform" activeTab={activeTab}>
+                            <QueryForm isEnrolled={isEnrolled} />
+                        </TabContent>
+                    </React.Fragment>
+                )}
             </div>
         </div>
     )

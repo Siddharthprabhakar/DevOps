@@ -41,7 +41,11 @@ export function Header() {
                             <li>
                                 <Link to="/mylearning">My Learning</Link>
                             </li>
-                        ) : null}
+                        ) : storedUser?.rolename === "instructor" ? (
+                            <li>
+                                <Link to="/myteaching">Courses I'm Teaching</Link>
+                            </li>
+                        ): null}
                     </ul>
                 </div>
                 <div className="navbar-end gap-4">

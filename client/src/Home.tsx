@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type HomeProps = {
     instructorName: string | undefined,
@@ -21,6 +21,7 @@ export function Home({ instructorName, category, isEnrolled, setIsEnrolled } : H
     const [showToast, setShowToast] = useState<boolean>(false);
     const [reviewData, setReviewData] = useState<ReviewData[]>();
     const location = useLocation();
+    const navigate = useNavigate();
     const courseId: number = parseInt(location.pathname.slice(-1));
 
     useEffect( () => {
@@ -52,30 +53,35 @@ export function Home({ instructorName, category, isEnrolled, setIsEnrolled } : H
     }, []);
 
     const handleEnroll = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/api/course/createEnrollment', 
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type' : 'application/json'},
-                    body: JSON.stringify({
-                        courseid: courseId,
-                        studentid: storedUser.roleid,
-                    })
-                }
-            )
-
-            if (response.status === 200) {
-                const responseData = await response.json();
-                console.log(responseData);
-                
-            } else {
-                console.error('Enrollment creation failed');
-            }
-        } catch (error) {
-            console.log(error);
+        if(!storedUser) {
+            navigate("/login");
         }
-        setIsEnrolled(true);
-        setShowToast(true);
+        else {
+            try {
+                const response = await fetch('http://localhost:8080/api/course/createEnrollment', 
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type' : 'application/json'},
+                        body: JSON.stringify({
+                            courseid: courseId,
+                            studentid: storedUser.roleid,
+                        })
+                    }
+                )
+
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    console.log(responseData);
+                    
+                } else {
+                    console.error('Enrollment creation failed');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            setIsEnrolled(true);
+            setShowToast(true);
+        }
     }
 
     return(

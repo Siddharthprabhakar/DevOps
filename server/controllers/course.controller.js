@@ -66,4 +66,31 @@ async function getEnrolledCourses(studentid){
   return data;
 }
 
-export { getAllCourses, getCourseInfo, isStudentEnrolled, createEnrollment, getEnrolledCourses }
+async function getTeachingCourses(instructorid) {
+  const data = await query(
+    `SELECT * from course c JOIN teaches t on c.courseid = t.courseid WHERE t.instructorid = ?`,[instructorid]
+  );
+    
+  return data;
+}
+
+async function isInstructorTeaching(courseid,instructorid) {
+  // Check if id is undefined and set it to null if it is
+  if (courseid === undefined) {
+    courseid = null;
+  }
+  // Check if id is undefined and set it to null if it is
+  if (instructorid === undefined) {
+    instructorid = null;
+  }
+  try {
+    const isTeaching = await query('SELECT COUNT(*) FROM Teaches WHERE courseid = ? AND instructorid = ?;', [courseid, instructorid]);
+    if(isTeaching[0]['COUNT(*)'] >= 1)
+      return true;
+    else
+      return false;
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+export { getAllCourses, getCourseInfo, isStudentEnrolled, createEnrollment, getEnrolledCourses, getTeachingCourses, isInstructorTeaching }

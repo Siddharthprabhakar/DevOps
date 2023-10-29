@@ -4,7 +4,9 @@ import {
     getAllCourses,
     getCourseInfo,
     isStudentEnrolled,
-    getEnrolledCourses
+    getEnrolledCourses,
+    getTeachingCourses,
+    isInstructorTeaching
 } from "../controllers/course.controller.js";
 
 
@@ -56,6 +58,24 @@ router.post('/getEnrolledCourses', async function(req, res, next) {
     } catch (err) {
         res.status(500);
         console.error(`Error while getting courses `, err.message);
+        next(err);
+    }
+});
+router.post('/getTeachingCourses', async function(req, res, next) {
+    try {
+        res.status(200).json(await getTeachingCourses(req.body.instructorid));
+    } catch (err) {
+        res.status(500);
+        console.error(`Error while getting courses `, err.message);
+        next(err);
+    }
+});
+router.post('/isInstructorTeaching', async function(req, res, next) {
+    try {
+        res.status(200).json(await isInstructorTeaching(req.body.courseid,req.body.instructorid));
+    } catch (err) {
+        res.status(500);
+        console.error(`Error while getting course info`, err.message);
         next(err);
     }
 });

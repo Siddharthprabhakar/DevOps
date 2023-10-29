@@ -8,4 +8,11 @@ async function getAllAssignments(id) {
         return null
 }
 
-export { getAllAssignments }
+async function createAssignment(assignment) {
+    const data = await query('INSERT INTO Assignment(courseid, title, status, due_date) VALUES(?, ?, ?, ?)',[assignment.courseid,assignment.title,assignment.status,assignment.dueDate])
+    if(data)
+        return data;
+    else
+        return null
+}
+export { getAllAssignments, createAssignment }

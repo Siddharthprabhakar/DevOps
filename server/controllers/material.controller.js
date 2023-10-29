@@ -8,4 +8,11 @@ async function getAllMaterials(id) {
         return null
 }
 
-export { getAllMaterials }
+async function createMaterial(material) {
+    const data = await query('INSERT INTO Material(courseid, title, content) VALUES(?, ?, ?)',[material.courseid,material.title,material.content])
+    if(data)
+        return data;
+    else
+        return null
+}
+export { getAllMaterials, createMaterial }
