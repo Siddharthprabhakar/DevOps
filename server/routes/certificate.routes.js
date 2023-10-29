@@ -1,19 +1,19 @@
 import express from "express";
 import { 
-    getAllCourses 
-} from "../controllers/course.controller.js";
+    getCertificate
+} from "../controllers/certificate.controller.js";
 
 
 /* Importing controllers */
 const router = express.Router();
 
 /* GET all courses */
-router.get('/getAllCourses', async function(req, res, next) {
+router.post('/getCertificate', async function(req, res, next) {
         try {
-            res.status(200).json(await getAllCourses());
+            res.status(200).json(await getCertificate(req.body.id));
         } catch (err) {
             res.status(500);
-            console.error(`Error while getting courses `, err.message);
+            console.error(`Error while getting certificate `, err.message);
             next(err);
         }
 });
