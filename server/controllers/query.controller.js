@@ -8,4 +8,12 @@ async function getAllQueries(id) {
         return null
 }
 
-export { getAllQueries }
+async function createQuery(queryReq) {
+    const data = await query('INSERT INTO Query(courseid, date_of_query, description) VALUES(?, ?, ?)',[queryReq.courseid,queryReq.date_of_query,queryReq.description])
+    if(data)
+        return data;
+    else
+        return null
+}
+
+export { getAllQueries, createQuery }
