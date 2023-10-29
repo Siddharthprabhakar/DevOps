@@ -1,6 +1,6 @@
 import React from "react";
 
-type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "review"
+type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "reviewform" | "queryform"
 
 type TabNavItemProps = {
     tabType: CourseTab,

@@ -6,7 +6,8 @@ import { Material } from "./Material"
 import { Assignment } from "./Assignment"
 import { Query } from "./Query"
 import { Certificate } from "./Certificate"
-import { Review } from "./Review"
+import { ReviewForm } from "./ReviewForm"
+import { QueryForm } from "./QueryForm"
 
 type CourseInfoProps = {
     courseId: number
@@ -19,8 +20,16 @@ type CourseInfoData = {
     category: string,
 }; 
 
+export type EnrollProps = {
+    isEnrolled: boolean | undefined
+}
+
 export function CourseInfo({ courseId }: CourseInfoProps) {
-    const [courseInfo, setCourseInfo] = useState<CourseInfoData>();
+    // Retrieve user details from localStorage
+    const storedUserString = sessionStorage.getItem("user");
+    const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+    const [ courseInfo, setCourseInfo ] = useState<CourseInfoData>();
+    const [ isEnrolled, setIsEnrolled ] = useState<boolean>();
     useEffect(() => {
         async function fetchCourseInfo() : Promise<any> {
             try {
@@ -50,11 +59,36 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
                 console.log(error);
             }
         }
+        async function isStudentEnrolled() : Promise<any> {
+            try {
+                const response = await fetch(
+                    `http://localhost:8080/api/course/isStudentEnrolled`, 
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type' : 'application/json'},
+                        body: JSON.stringify({
+                            courseid: courseId,
+                            studentid: storedUser.roleid,
+                        })
+                    }
+                )
+
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    setIsEnrolled(responseData)
+                } else {
+                    console.error('Enrollment info fetching failed');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
         fetchCourseInfo();
+        isStudentEnrolled();
     }, []);
     
     
-    type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "review"
+    type CourseTab = "home" | "material" | "assignment" | "query" | "certificate" | "reviewform" | "queryform"
 
     const [activeTab, setActiveTab] = useState<CourseTab>("home")
 
@@ -71,26 +105,30 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
                 <TabNavItem tabType="assignment" tabTitle="Assignments" activeTab={activeTab} setActiveTab={setActiveTab} />
                 <TabNavItem tabType="query" tabTitle="Queries" activeTab={activeTab} setActiveTab={setActiveTab} />
                 <TabNavItem tabType="certificate" tabTitle="Certificate" activeTab={activeTab} setActiveTab={setActiveTab} />
-                <TabNavItem tabType="review" tabTitle="Write a Review" activeTab={activeTab} setActiveTab={setActiveTab} />   
+                <TabNavItem tabType="reviewform" tabTitle="Write a Review" activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavItem tabType="queryform" tabTitle="Write a Query" activeTab={activeTab} setActiveTab={setActiveTab} />   
             </div>
             <div className="outlet">
                 <TabContent tabType="home" activeTab={activeTab}>
-                    <Home instructorName={courseInfo?.instructorName} category={courseInfo?.category}/>
+                    <Home setIsEnrolled={setIsEnrolled} isEnrolled={isEnrolled} instructorName={courseInfo?.instructorName} category={courseInfo?.category}/>
                 </TabContent>
                 <TabContent tabType="material" activeTab={activeTab}>
-                    <Material />
+                    <Material isEnrolled={isEnrolled} />
                 </TabContent>
                 <TabContent tabType="assignment" activeTab={activeTab}>
-                    <Assignment />
+                    <Assignment isEnrolled={isEnrolled} />
                 </TabContent>
                 <TabContent tabType="query" activeTab={activeTab}>
-                    <Query />
+                    <Query isEnrolled={isEnrolled} />
                 </TabContent>
                 <TabContent tabType="certificate" activeTab={activeTab}>
-                    <Certificate title="Test Title" />
+                    <Certificate isEnrolled={isEnrolled} />
                 </TabContent>
-                <TabContent tabType="review" activeTab={activeTab}>
-                    <Review />
+                <TabContent tabType="reviewform" activeTab={activeTab}>
+                    <ReviewForm isEnrolled={isEnrolled} />
+                </TabContent>
+                <TabContent tabType="queryform" activeTab={activeTab}>
+                    <QueryForm isEnrolled={isEnrolled} />
                 </TabContent>
             </div>
         </div>

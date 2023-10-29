@@ -20,5 +20,50 @@ async function getCourseInfo(id) {
     else
         return null;
 }
+async function isStudentEnrolled(courseid, studentid) {
+    // Check if id is undefined and set it to null if it is
+    if (courseid === undefined) {
+      courseid = null;
+    }
+    // Check if id is undefined and set it to null if it is
+    if (studentid === undefined) {
+      studentid = null;
+    }
+    try {
+      const isRegistered = await query('SELECT COUNT(*) FROM Registers WHERE courseid = ? AND studentid = ?;', [courseid, studentid]);
+      if(isRegistered[0]['COUNT(*)'] >= 1)
+        return true;
+      else
+        return false;
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+}
 
-export { getAllCourses, getCourseInfo }
+async function createEnrollment(courseid, studentid) {
+  // Check if id is undefined and set it to null if it is
+  if (courseid === undefined) {
+    courseid = null;
+  }
+  // Check if id is undefined and set it to null if it is
+  if (studentid === undefined) {
+    studentid = null;
+  }
+  try {
+    const data = await query('INSERT INTO Registers(courseid, studentid) VALUES(?, ?);', [courseid, studentid]);
+    return data;
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+
+}
+
+async function getEnrolledCourses(studentid){
+  const data = await query(
+    `SELECT * from course c JOIN registers r on c.courseid = r.courseid WHERE r.studentid = ?`,[studentid]
+  );
+    
+  return data;
+}
+
+export { getAllCourses, getCourseInfo, isStudentEnrolled, createEnrollment, getEnrolledCourses }

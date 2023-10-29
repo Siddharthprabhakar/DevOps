@@ -45,6 +45,7 @@ export function Signup() {
                                     <button type="submit" className="mt-3 w-full flex justify-center bg-secondary hover:bg-secondary-focus text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-300">
                                         Sign Up
                                     </button>
+                                    <Link to="/login" className="link link-hover link-secondary">Already have an account?</Link>
                                     <Link to="/" className="link link-hover link-secondary">Go to Home</Link>
                                 </div>
                             </div>

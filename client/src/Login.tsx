@@ -83,6 +83,7 @@ export function Login() {
                                     <button type="submit" className="w-full flex justify-center bg-secondary hover:bg-secondary-focus text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
                                         Log in
                                     </button>
+                                    <Link to="/signup" className="link link-hover link-secondary">Don't have an account?</Link>
                                     <Link to="/" className="link link-hover link-secondary">Go to Home</Link>
                                 </div>
                             </form>

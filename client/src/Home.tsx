@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 type HomeProps = {
     instructorName: string | undefined,
     category: string | undefined,
+    isEnrolled: boolean | undefined,
+    setIsEnrolled: React.Dispatch<React.SetStateAction<boolean | undefined>>,
 }
 
 type ReviewData = {
@@ -12,7 +14,11 @@ type ReviewData = {
     rating: number,
 }
 
-export function Home({ instructorName, category} : HomeProps) {
+export function Home({ instructorName, category, isEnrolled, setIsEnrolled } : HomeProps) {
+    // Retrieve user details from localStorage
+    const storedUserString = sessionStorage.getItem("user");
+    const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+    const [showToast, setShowToast] = useState<boolean>(false);
     const [reviewData, setReviewData] = useState<ReviewData[]>();
     const location = useLocation();
     const courseId: number = parseInt(location.pathname.slice(-1));
@@ -45,12 +51,51 @@ export function Home({ instructorName, category} : HomeProps) {
         fetchAllReviews();
     }, []);
 
+    const handleEnroll = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/course/createEnrollment', 
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type' : 'application/json'},
+                    body: JSON.stringify({
+                        courseid: courseId,
+                        studentid: storedUser.roleid,
+                    })
+                }
+            )
+
+            if (response.status === 200) {
+                const responseData = await response.json();
+                console.log(responseData);
+                
+            } else {
+                console.error('Enrollment creation failed');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        setIsEnrolled(true);
+        setShowToast(true);
+    }
+
     return(
         <div>
-            <p className="text-2xl mb-2">Course Instructor</p>
-            <p className="mb-2">{instructorName}</p>
-            <p className="text-2xl mb-2">Course Category</p>
-            <p className="mb-2">{category}</p>
+            <div className="flex gap-4 items-center">
+                <div className="flex flex-col">
+                    <p className="text-2xl mb-2">Course Instructor</p>
+                    <p className="mb-2">{instructorName}</p>
+                    <p className="text-2xl mb-2">Course Category</p>
+                    <p className="mb-2">{category}</p>
+                </div>
+                {!isEnrolled ? (
+                    <div 
+                        className="btn btn-primary btn-outline btn-xs sm:btn-sm md:btn-md lg:btn-lg"
+                        onClick={handleEnroll}
+                    >
+                        Enroll for Course
+                    </div>
+                ) : null}
+            </div>
             <p className="text-2xl">Course Reviews</p>
             {reviewData?.map((review: ReviewData, index) => (
                 <div key={index} className="card card-side bg-base-100 shadow-xl my-5">
@@ -74,6 +119,13 @@ export function Home({ instructorName, category} : HomeProps) {
                     </div>
                 </div>
             ))}
+            { showToast ? (
+                <div className="toast toast-end animate-fade-toast opacity-0">
+                    <div className="alert alert-success">
+                        <span>Enrolled Successfully!</span>
+                    </div>
+                </div>
+            ): null }
         </div>
     )
 }

@@ -5,7 +5,6 @@ export function Header() {
     // Retrieve user details from localStorage
     const storedUserString = sessionStorage.getItem("user");
     const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
-    console.log(storedUser);
     const handleLogout = () => {
         sessionStorage.clear();
     }
@@ -38,6 +37,11 @@ export function Header() {
                         <li>
                             <Link to="/catalog">Course Catalog</Link>
                         </li>
+                        {storedUser?.rolename === "student" ? (
+                            <li>
+                                <Link to="/mylearning">My Learning</Link>
+                            </li>
+                        ) : null}
                     </ul>
                 </div>
                 <div className="navbar-end gap-4">
