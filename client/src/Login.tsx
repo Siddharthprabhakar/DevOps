@@ -23,7 +23,6 @@ export function Login() {
             )
             const responseData = await response.json();
             if (responseData !== null) {
-                console.log(responseData);
                 // Store the user object in localStorage
                 sessionStorage.setItem("user", JSON.stringify(responseData));
                 navigate("/");

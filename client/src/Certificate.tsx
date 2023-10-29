@@ -31,7 +31,6 @@ export function Certificate() {
                 )
 
                 if (response.status === 200) {
-                    console.log(storedUser);
                     const responseData = await response.json();
                     if (storedUser) {
                         setCertData({
