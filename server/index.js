@@ -11,6 +11,7 @@ import materialRouter from './routes/material.routes.js';
 import assignmentRouter from './routes/assignment.routes.js';
 import queryRouter from './routes/query.routes.js';
 import certRouter from './routes/certificate.routes.js';
+import categoryRouter from './routes/category.routes.js';
 
 /* Configuring our environment */
 dotenv.config();
@@ -31,7 +32,8 @@ app.use("/api/review", reviewRouter);
 app.use("/api/material", materialRouter);
 app.use("/api/assignment", assignmentRouter);
 app.use("/api/query", queryRouter);
-app.use("/api/certificate", certRouter)
+app.use("/api/certificate", certRouter);
+app.use("/api/category", categoryRouter);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
