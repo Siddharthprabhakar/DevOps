@@ -2,6 +2,13 @@ import React from "react"
 import { Link } from "react-router-dom"
 
 export function Header() {
+    // Retrieve user details from localStorage
+    const storedUserString = sessionStorage.getItem("user");
+    const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+    console.log(storedUser);
+    const handleLogout = () => {
+        sessionStorage.clear();
+    }
     return (
         <React.Fragment>
             <div className="navbar bg-base-100">
@@ -34,8 +41,27 @@ export function Header() {
                     </ul>
                 </div>
                 <div className="navbar-end gap-4">
-                    <Link to="/signup" className="btn btn-outline btn-primary">Sign Up</Link>
-                    <Link to="/login" className="btn btn-primary">Login</Link>
+                    {storedUser === null ? (
+                        <React.Fragment>
+                            <Link to="/signup" className="btn btn-outline btn-primary">Sign Up</Link>
+                            <Link to="/login" className="btn btn-primary">Login</Link>
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            <div className="avatar placeholder">
+                                <div className="bg-neutral-focus text-neutral-content rounded-full w-12">
+                                    <span className="text-md">{storedUser ? storedUser.name.split(' ').map((word: string) => word[0]).join('') : null}</span>
+                                </div>
+                            </div>
+                            <Link to="/"
+                                onClick={handleLogout}
+                                className="btn btn-outline btn-error"
+                            >
+                                Sign Out
+                            </Link>
+
+                        </React.Fragment>
+                    )}
                 </div>
             </div>
         </React.Fragment>
