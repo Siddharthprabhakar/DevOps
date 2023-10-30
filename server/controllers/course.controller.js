@@ -1,9 +1,7 @@
 import { query } from '../connect.js'
 
 async function getAllCourses(){
-  const data = await query(
-    `SELECT * from course`
-  );
+  const data = await query(`SELECT * from course`);
     
   return data;
 }
@@ -20,6 +18,7 @@ async function getCourseInfo(id) {
     else
         return null;
 }
+
 async function isStudentEnrolled(courseid, studentid) {
     // Check if id is undefined and set it to null if it is
     if (courseid === undefined) {
@@ -67,10 +66,7 @@ async function getEnrolledCourses(studentid){
 }
 
 async function getTeachingCourses(instructorid) {
-  const data = await query(
-    `SELECT * from course c JOIN teaches t on c.courseid = t.courseid WHERE t.instructorid = ?`,[instructorid]
-  );
-    
+  const data = await query(`SELECT * from course c JOIN teaches t on c.courseid = t.courseid WHERE t.instructorid = ?`,[instructorid]);
   return data;
 }
 
@@ -93,4 +89,12 @@ async function isInstructorTeaching(courseid,instructorid) {
     console.error('Error:', error.message);
   }
 }
-export { getAllCourses, getCourseInfo, isStudentEnrolled, createEnrollment, getEnrolledCourses, getTeachingCourses, isInstructorTeaching }
+export { 
+  getAllCourses, 
+  getCourseInfo, 
+  isStudentEnrolled, 
+  createEnrollment, 
+  getEnrolledCourses, 
+  getTeachingCourses, 
+  isInstructorTeaching 
+}

@@ -13,7 +13,7 @@ import {
 /* Importing controllers */
 const router = express.Router();
 
-/* GET all courses */
+
 router.get('/getAllCourses', async function(req, res, next) {
         try {
             res.status(200).json(await getAllCourses());
@@ -24,7 +24,6 @@ router.get('/getAllCourses', async function(req, res, next) {
         }
 });
 
-/* GET all course info */
 router.post('/getCourseInfo', async function(req, res, next) {
     try {
         res.status(200).json(await getCourseInfo(req.body.id));
@@ -70,6 +69,7 @@ router.post('/getTeachingCourses', async function(req, res, next) {
         next(err);
     }
 });
+
 router.post('/isInstructorTeaching', async function(req, res, next) {
     try {
         res.status(200).json(await isInstructorTeaching(req.body.courseid,req.body.instructorid));

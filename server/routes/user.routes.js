@@ -10,7 +10,6 @@ import {
 /* Importing controllers */
 const router = express.Router();
 
-/* POST user details and validateLogin */
 router.post('/validateLogin', async function(req, res, next) {
         try {
             res.status(200).json(await validateLogin(req.body));

@@ -7,7 +7,7 @@ import {
 /* Importing controllers */
 const router = express.Router();
 
-/* GET all courses */
+
 router.get('/getAllCourses', async function(req, res, next) {
         try {
             res.status(200).json(await getAllCourses());

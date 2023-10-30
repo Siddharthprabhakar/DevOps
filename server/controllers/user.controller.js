@@ -12,11 +12,9 @@ async function validateLogin(user) {
 
 async function createUser(user) {
     try {
-        // Insert the user and wait for it to complete
         const insertResult = await query('INSERT INTO User(name, email, password) VALUES (?, ?, ?)', [user.name, user.email, user.password]);
         
         if (insertResult) {
-            // Now, query for the userid of the newly inserted user
             const selectResult = await query('SELECT userid FROM User WHERE email = ?', [user.email]);
             
             if (selectResult && selectResult[0] && selectResult[0].userid) {
@@ -27,7 +25,6 @@ async function createUser(user) {
         console.error('Error:', error);
     }
 
-    // Return null if there was an error or if userid couldn't be retrieved
     return null;
 }
 

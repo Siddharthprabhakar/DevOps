@@ -7,7 +7,7 @@ import {
 /* Importing controllers */
 const router = express.Router();
 
-/* GET all courses */
+
 router.post('/getCertificate', async function(req, res, next) {
         try {
             res.status(200).json(await getCertificate(req.body.id));

@@ -8,7 +8,6 @@ import {
 /* Importing controllers */
 const router = express.Router();
 
-/* GET all courses */
 router.post('/getAllAssignments', async function(req, res, next) {
     try {
         res.status(200).json(await getAllAssignments(req.body.id));
