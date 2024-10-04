@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0        # Use the official MySQL image
+    restart: always          # Restart the container if it stops
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Set the root password
+      MYSQL_DATABASE: eduflex          # Create a default database
+      MYSQL_USER: vk                    # Create a new user
+      MYSQL_PASSWORD: 1234        # Set password for the new user
+    ports:
+      - "3307:3306"         # Map port 3306 on the host to port 3306 on the container
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persist data
+
+volumes:
+  mysql_data:               # Define a volume for MySQL data persistence
