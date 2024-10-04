@@ -11,7 +11,7 @@ export function Login() {
         const user = { email, password };
         try {
             const response = await fetch(
-                'http://localhost:8080/api/user/validateLogin', 
+                'http://localhost:9090/api/user/validateLogin', 
                 {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

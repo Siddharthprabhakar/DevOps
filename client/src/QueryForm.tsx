@@ -17,7 +17,7 @@ export function QueryForm({isEnrolled} : EnrollProps) {
         const formattedDate = `${year}-${month}-${day}`;
 
         try {
-            const response = await fetch('http://localhost:8080/api/query/createQuery', 
+            const response = await fetch('http://localhost:9090/api/query/createQuery', 
                 {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

@@ -28,7 +28,7 @@ export function Home({ instructorName, category, isEnrolled, setIsEnrolled } : H
         async function fetchAllReviews() : Promise<any> {
             try {
                 const response = await fetch(
-                    `http://localhost:8080/api/review/getAllReviews`, 
+                    `http://localhost:9090/api/review/getAllReviews`, 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},
@@ -58,7 +58,7 @@ export function Home({ instructorName, category, isEnrolled, setIsEnrolled } : H
         }
         else {
             try {
-                const response = await fetch('http://localhost:8080/api/course/createEnrollment', 
+                const response = await fetch('http://localhost:9090/api/course/createEnrollment', 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

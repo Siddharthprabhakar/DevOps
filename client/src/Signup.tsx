@@ -18,7 +18,7 @@ export function Signup() {
     useEffect(() => {
         async function fetchAllCategories() {
             try {
-                const response = await fetch('http://localhost:8080/api/category/getAllCategories', 
+                const response = await fetch('http://localhost:9090/api/category/getAllCategories', 
                 {
                     method: 'GET',
                     headers: { 'Content-Type' : 'application/json'},
@@ -42,7 +42,7 @@ export function Signup() {
         console.log(userRole);
         async function createStudent () {
             try {
-                const response = await fetch('http://localhost:8080/api/user/createStudent', 
+                const response = await fetch('http://localhost:9090/api/user/createStudent', 
                 {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},
@@ -68,7 +68,7 @@ export function Signup() {
             
         async function createInstructor(){
             try {
-                const response = await fetch('http://localhost:8080/api/user/createInstructor', 
+                const response = await fetch('http://localhost:9090/api/user/createInstructor', 
                 {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

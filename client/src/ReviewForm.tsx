@@ -18,7 +18,7 @@ export function ReviewForm({isEnrolled} : EnrollProps) {
         const formattedDate = `${year}-${month}-${day}`;
 
         try {
-            const response = await fetch('http://localhost:8080/api/review/createReview', 
+            const response = await fetch('http://localhost:9090/api/review/createReview', 
                 {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

@@ -15,7 +15,7 @@ export function Assignment({isEnrolled} : EnrollProps) {
     useEffect( () => {
         async function fetchAllAssignments() : Promise<any> {
             try {
-                const response = await fetch('http://localhost:8080/api/assignment/getAllAssignments', 
+                const response = await fetch('http://localhost:9090/api/assignment/getAllAssignments', 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

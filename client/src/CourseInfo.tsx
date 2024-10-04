@@ -42,7 +42,7 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
         async function fetchCourseInfo() : Promise<any> {
             try {
                 const response = await fetch(
-                    `http://localhost:8080/api/course/getCourseInfo`, 
+                    `http://localhost:9090/api/course/getCourseInfo`, 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},
@@ -70,7 +70,7 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
         async function isStudentEnrolled() : Promise<any> {
             try {
                 const response = await fetch(
-                    `http://localhost:8080/api/course/isStudentEnrolled`, 
+                    `http://localhost:9090/api/course/isStudentEnrolled`, 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},
@@ -97,7 +97,7 @@ export function CourseInfo({ courseId }: CourseInfoProps) {
         async function isInstructorTeaching() : Promise<any> {
             try {
                 const response = await fetch(
-                    `http://localhost:8080/api/course/isInstructorTeaching`, 
+                    `http://localhost:9090/api/course/isInstructorTeaching`, 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

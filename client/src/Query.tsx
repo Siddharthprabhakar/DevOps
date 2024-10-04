@@ -14,7 +14,7 @@ export function Query({isEnrolled} : EnrollProps) {
     useEffect( () => {
         async function fetchAllQueries() : Promise<any> {
             try {
-                const response = await fetch('http://localhost:8080/api/query/getAllQueries', 
+                const response = await fetch('http://localhost:9090/api/query/getAllQueries', 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

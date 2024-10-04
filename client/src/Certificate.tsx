@@ -21,7 +21,7 @@ export function Certificate({isEnrolled} : EnrollProps) {
     useEffect( () => {
         async function fetchCertificate() : Promise<any> {
             try {
-                const response = await fetch('http://localhost:8080/api/certificate/getCertificate', 
+                const response = await fetch('http://localhost:9090/api/certificate/getCertificate', 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

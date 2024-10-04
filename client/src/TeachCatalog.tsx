@@ -19,7 +19,7 @@ export function TeachCatalog() {
     useEffect( () => {
         async function fetchTeachingCourses() : Promise<any> {
             try {
-                const response = await fetch('http://localhost:8080/api/course/getTeachingCourses', 
+                const response = await fetch('http://localhost:9090/api/course/getTeachingCourses', 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

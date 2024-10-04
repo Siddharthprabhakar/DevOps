@@ -15,7 +15,7 @@ export function Material({isEnrolled} : EnrollProps) {
     useEffect( () => {
         async function fetchAllMaterials() : Promise<any> {
             try {
-                const response = await fetch('http://localhost:8080/api/material/getAllMaterials', 
+                const response = await fetch('http://localhost:9090/api/material/getAllMaterials', 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

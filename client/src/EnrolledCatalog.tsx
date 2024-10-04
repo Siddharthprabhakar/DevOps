@@ -20,7 +20,7 @@ export function EnrolledCatalog() {
         async function fetchEnrolledCourses() : Promise<any> {
             try {
                 const response = await fetch(
-                    'http://localhost:8080/api/course/getEnrolledCourses', 
+                    'http://localhost:9090/api/course/getEnrolledCourses', 
                     {
                         method: 'POST',
                         headers: { 'Content-Type' : 'application/json'},

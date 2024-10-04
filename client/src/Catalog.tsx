@@ -17,7 +17,7 @@ export function Catalog() {
         async function fetchAllCourses() : Promise<any> {
             try {
                 const response = await fetch(
-                    'http://localhost:8080/api/course/getAllCourses', 
+                    'http://localhost:9090/api/course/getAllCourses', 
                     {
                         method: 'GET',
                         headers: { 'Content-Type' : 'application/json'},

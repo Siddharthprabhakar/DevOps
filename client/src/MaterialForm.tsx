@@ -11,7 +11,7 @@ export function MaterialForm({isTeaching} : TeachProps) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/api/material/createMaterial', 
+            const response = await fetch('http://localhost:9090/api/material/createMaterial', 
                 {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

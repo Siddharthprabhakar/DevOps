@@ -11,7 +11,7 @@ export function AssignmentForm({isTeaching} : TeachProps) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/api/assignment/createAssignment', 
+            const response = await fetch('http://localhost:9090/api/assignment/createAssignment', 
                 {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},
