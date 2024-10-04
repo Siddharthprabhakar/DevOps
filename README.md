@@ -1,16 +1,33 @@
-# React + TypeScript + Vite
+# EduFlex Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+EduFlex is a web application designed for managing educational courses, user enrollments, and teaching materials. This project demonstrates various DevOps concepts, including containerization with Docker, continuous integration/continuous deployment (CI/CD), and infrastructure as code.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Table of Contents
 
-## Build Instructions
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Clone the Repository](#clone-the-repository)
 
-```
-   cd client
-   npm install
-   npm run dev
-```
+## Technologies Used
+
+- **Frontend:** React, React Router
+- **Backend:** Node.js, Express, MySQL
+- **Containerization:** Docker, Docker Compose
+- **Version Control:** Git, GitHub
+
+## Getting Started
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/products/docker-desktop) installed on your machine
+- [Docker Compose](https://docs.docker.com/compose/) installed
+- Basic knowledge of Git and command line
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Siddharthprabhakar/DevOps.git
+cd DevOps
