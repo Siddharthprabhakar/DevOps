@@ -43,7 +43,7 @@ app.use((err, req, res, next) => {
     return;
 });
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000; // Default to port 5000 if PORT is not set
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

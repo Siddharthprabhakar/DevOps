@@ -2,16 +2,17 @@ FROM node:20.11.1-alpine
 
 WORKDIR /app
 
-COPY package.json .
+COPY package.json ./
 
 RUN npm install
 
-RUN npm i -g serve
-
-COPY . .
+COPY . ./
 
 RUN npm run build
 
+RUN npm i -g serve
+
 EXPOSE 3000
 
-CMD [ "serve", "-s", "dist" ]
+# Serve from the 'build' directory, not 'dist'
+CMD ["serve", "-s", "dist"]
