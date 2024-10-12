@@ -33,7 +33,8 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init:/docker-entrypoint-initdb.d  # Mount the SQL file for initialization
+      - ./init/eduflexdb.sql:/docker-entrypoint-initdb.d/eduflexdb.sql  # Mount the SQL file for initialization
+      - ./init/my.cnf:/etc/mysql/conf.d/my.cnf:ro # Custom configs
     networks:
       - app-network
 

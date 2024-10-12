@@ -7,17 +7,27 @@ async function getAllCourses(){
 }
 
 async function getCourseInfo(id) {
-    // Check if id is undefined and set it to null if it is
-    if (id === undefined) {
-      id = null;
-    }
-    
-    const data = await query('CALL GetCourseDetails(?)', [id]);
-    if(data[0][0])
-        return data[0][0];
-    else
-        return null;
+  // Check if id is undefined and set it to null if it is
+  if (id === undefined) {
+      id = null; // Consider if you really want to use null
+  }
+
+  try {
+      // Call the stored procedure
+      const data = await query('CALL GetCourseDetails(?)', [id]);
+
+      // Check if data exists and return the first result
+      if (data[0] && data[0][0]) {
+          return data[0][0];
+      } else {
+          return null; // No data found
+      }
+  } catch (error) {
+      console.error("Error fetching course info:", error);
+      throw error; // Optionally rethrow the error for further handling
+  }
 }
+
 
 async function isStudentEnrolled(courseid, studentid) {
     // Check if id is undefined and set it to null if it is
@@ -29,7 +39,7 @@ async function isStudentEnrolled(courseid, studentid) {
       studentid = null;
     }
     try {
-      const isRegistered = await query('SELECT COUNT(*) FROM Registers WHERE courseid = ? AND studentid = ?;', [courseid, studentid]);
+      const isRegistered = await query('SELECT COUNT(*) FROM registers WHERE courseid = ? AND studentid = ?;', [courseid, studentid]);
       if(isRegistered[0]['COUNT(*)'] >= 1)
         return true;
       else
@@ -49,7 +59,7 @@ async function createEnrollment(courseid, studentid) {
     studentid = null;
   }
   try {
-    const data = await query('INSERT INTO Registers(courseid, studentid) VALUES(?, ?);', [courseid, studentid]);
+    const data = await query('INSERT INTO registers(courseid, studentid) VALUES(?, ?);', [courseid, studentid]);
     return data;
   } catch (error) {
     console.error('Error:', error.message);
@@ -80,7 +90,7 @@ async function isInstructorTeaching(courseid,instructorid) {
     instructorid = null;
   }
   try {
-    const isTeaching = await query('SELECT COUNT(*) FROM Teaches WHERE courseid = ? AND instructorid = ?;', [courseid, instructorid]);
+    const isTeaching = await query('SELECT COUNT(*) FROM teaches WHERE courseid = ? AND instructorid = ?;', [courseid, instructorid]);
     if(isTeaching[0]['COUNT(*)'] >= 1)
       return true;
     else

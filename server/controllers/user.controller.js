@@ -12,10 +12,10 @@ async function validateLogin(user) {
 
 async function createUser(user) {
     try {
-        const insertResult = await query('INSERT INTO User(name, email, password) VALUES (?, ?, ?)', [user.name, user.email, user.password]);
+        const insertResult = await query('INSERT INTO user(name, email, password) VALUES (?, ?, ?)', [user.name, user.email, user.password]);
         
         if (insertResult) {
-            const selectResult = await query('SELECT userid FROM User WHERE email = ?', [user.email]);
+            const selectResult = await query('SELECT userid FROM user WHERE email = ?', [user.email]);
             
             if (selectResult && selectResult[0] && selectResult[0].userid) {
                 return selectResult[0].userid;

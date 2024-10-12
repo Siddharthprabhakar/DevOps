@@ -445,7 +445,7 @@ BEGIN
     SET result = 0;
 
     -- Check if there is a row with the provided courseId and studentId
-    IF EXISTS (SELECT 1 FROM Registers WHERE courseid = courseId AND studentid = studentId) THEN
+    IF EXISTS (SELECT 1 FROM registers WHERE courseid = courseId AND studentid = studentId) THEN
         -- Row exists, set result to 1 (true)
         SET result = 1;
     END IF;
@@ -472,11 +472,11 @@ BEGIN
         CER.date_of_query AS issue_date,
         U.name as instructor_name,
         CONCAT("ceRtscxe4ss", CER.certificateid) as certificate_id
-    FROM Course C
-    JOIN Teaches T ON C.courseid = T.courseid
-    JOIN Instructor I ON T.instructorid = I.instructorid
-    JOIN User U ON I.userid = U.userid
-    JOIN Certificate CER ON C.courseid = CER.courseid
+    FROM course C
+    JOIN teaches T ON C.courseid = T.courseid
+    JOIN instructor I ON T.instructorid = I.instructorid
+    JOIN user U ON I.userid = U.userid
+    JOIN certificate CER ON C.courseid = CER.courseid
     WHERE C.courseid = courseId;
 END ;;
 DELIMITER ;
@@ -497,15 +497,15 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetCourseDetails`(IN courseId INT)
 BEGIN
     SELECT
-		C.title AS course_title,
+        C.title AS course_title,
         C.description AS course_description,
         U.name AS instructor_name,
         CAT.name AS category_name
-    FROM Course C
-    JOIN Teaches T ON C.courseid = T.courseid
-    JOIN Instructor I ON T.instructorid = I.instructorid
-    JOIN User U ON I.userid = U.userid
-    JOIN Category CAT ON C.categoryid = CAT.categoryid
+    FROM course C
+    JOIN teaches T ON C.courseid = T.courseid
+    JOIN instructor I ON T.instructorid = I.instructorid
+    JOIN user U ON I.userid = U.userid
+    JOIN category CAT ON C.categoryid = CAT.categoryid
     WHERE C.courseid = courseId;
 END ;;
 DELIMITER ;
@@ -550,8 +550,8 @@ BEGIN
             ELSE NULL
         END AS expertise
     FROM User U
-    LEFT JOIN Student S ON U.userid = S.userid
-    LEFT JOIN Instructor I ON U.userid = I.userid
+    LEFT JOIN student S ON U.userid = S.userid
+    LEFT JOIN instructor I ON U.userid = I.userid
     WHERE U.email = userEmail AND U.password = userPassword;
 END ;;
 DELIMITER ;
