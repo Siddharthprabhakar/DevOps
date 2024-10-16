@@ -7,16 +7,16 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "9090:5000"
+      - "9090:5000"  # Map container port 5000 to host port 9090
     depends_on:
       - db
     environment:
-      DB_HOST: db
+      DB_HOST: db  # Use the db service name as the host
       DB_USER: vk
       DB_PASSWORD: 1234
       DB_NAME: eduflex
     volumes:
-      - ./server:/app
+      - ./server:/app  # Persist code changes
     networks:
       - app-network
 
@@ -30,11 +30,11 @@ services:
       MYSQL_USER: vk
       MYSQL_PASSWORD: 1234
     ports:
-      - "3307:3306"
+      - "3307:3306"  # Map container port 3306 to host port 3307
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./init/eduflexdb.sql:/docker-entrypoint-initdb.d/eduflexdb.sql  # Mount the SQL file for initialization
-      - ./init/my.cnf:/etc/mysql/conf.d/my.cnf:ro # Custom configs
+      - mysql_data:/var/lib/mysql  # Persist data
+      - ./init/eduflexdb.sql:/docker-entrypoint-initdb.d/eduflexdb.sql  # Initialize the database
+      - ./init/my.cnf:/etc/mysql/conf.d/my.cnf:ro  # Custom MySQL config
     networks:
       - app-network
 
@@ -44,7 +44,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Map container port 3000 to host port 3000
     environment:
       REACT_APP_API_URL: http://localhost:5000
     networks:
@@ -52,10 +52,11 @@ services:
     depends_on:
       - server
     volumes:
-      - ./client:/app
+      - ./client:/app  # Persist code changes
 
 volumes:
-  mysql_data:
+  mysql_data:  # Volume for MySQL data persistence
 
 networks:
-  app-network:
+  app-network:  # Network for communication between services
+
