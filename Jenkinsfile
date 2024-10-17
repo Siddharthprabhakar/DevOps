@@ -72,14 +72,6 @@ pipeline {
             }
         }
         
-        stage('Terraform Plan') {
-            steps {
-                dir('terraform') {
-                    bat 'terraform plan'
-                }
-            }
-        }
-
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
