@@ -10,8 +10,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // Checkout the repository containing Terraform files
-                git url: 'https://github.com/Siddharthprabhakar/DevOps.git'
+                checkout scmGit(branches: [[name: 'main']], 
+                                userRemoteConfigs: [[url: 'https://github.com/Siddharthprabhakar/DevOps']])
             }
         }
 
