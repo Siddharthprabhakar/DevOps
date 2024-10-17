@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/Sujaay/DevOps'  // Your GitHub repository URL
+        REPO_URL = 'https://github.com/Siddharthprabhakar/DevOps.git'  // Your GitHub repository URL
         DOCKER_FRONTEND_IMAGE = 'sujaykumar47/frontend-app'  // Docker image for frontend
         DOCKER_BACKEND_IMAGE = 'sujaykumar47/backend-app'  // Docker image for backend
         DOCKER_TAG = 'latest'
