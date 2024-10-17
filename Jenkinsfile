@@ -55,19 +55,22 @@ pipeline {
             }
         }
 
-        stage('Logout from DockerHub') {
-            steps {
-                script {
-                    // Logout from Docker Hub
-                    bat 'docker logout'
-                }
-            }
-        }
-
         stage('Terraform Init') {
             steps {
                 dir('terraform') {
                     bat 'terraform init'
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    // Change directory to the terraform folder
+                    dir('terraform') {
+                        // Run Terraform Plan
+                        bat 'terraform plan'
+                    }
                 }
             }
         }
@@ -76,8 +79,17 @@ pipeline {
             steps {
                 dir('terraform') {
                     script {
-                        bat 'terraform apply --auto-approve -var="key_name=my-ec2-key"'
+                        bat 'terraform apply --auto-approve'
                     }
+                }
+            }
+        }
+
+        stage('Logout from DockerHub') {
+            steps {
+                script {
+                    // Logout from Docker Hub
+                    bat 'docker logout'
                 }
             }
         }
