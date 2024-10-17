@@ -63,6 +63,34 @@ pipeline {
                 }
             }
         }
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'b2f3d3dd-0852-4f33-8831-88cbf4dbddca', url: 'https://github.com/Siddharthprabhakar/DevOps'
+            }
+        }
+        
+        stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                }
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform plan'
+                }
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply --auto-approve'
+                }
+            }
+        }
     }
 
     post {

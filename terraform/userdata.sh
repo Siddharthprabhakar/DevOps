@@ -32,4 +32,4 @@ git clone https://github.com/Siddharthprabhakar/DevOps.git .
 sudo docker-compose up -d
 
 # Output a success message
-echo "WorkSync application setup completed."
+echo "eduflex application setup completed."
