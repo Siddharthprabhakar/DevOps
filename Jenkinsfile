@@ -63,10 +63,11 @@ pipeline {
                 }
             }
         }
-         stage('Terraform Init') {
+
+        stage('Terraform Init') {
             steps {
                 dir('terraform') {
-                    sh 'terraform init'
+                    bat 'terraform init'
                 }
             }
         }
@@ -74,7 +75,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 dir('terraform') {
-                    sh 'terraform plan'
+                    bat 'terraform plan'
                 }
             }
         }
@@ -82,7 +83,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
-                    sh 'terraform apply --auto-approve'
+                    bat 'terraform apply --auto-approve'
                 }
             }
         }
