@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eduflex-deployment
+  labels:
+    app: eduflex
+spec:
+  replicas: 2  # Number of replicas for your application
+  selector:
+    matchLabels:
+      app: eduflex
+  template:
+    metadata:
+      labels:
+        app: eduflex
+    spec:
+      containers:
+      - name: eduflex-client
+        image: eduflex-client:latest  # Replace with your actual client Docker image
+        ports:
+        - containerPort: 3000
+      - name: eduflex-server
+        image: eduflex-server:latest  # Replace with your actual server Docker image
+        ports:
+        - containerPort: 5000  # Assuming your backend runs on port 5000
+        env:
+        - name: DB_HOST  # Database connection environment variable
+          value: "mysql-service"  # Name of the MySQL service
+        - name: DB_USER  # MySQL username
+          value: "root"  # Adjust as needed
+        - name: DB_PASSWORD  # MySQL password
+          value: "root"  # Adjust as needed
+        - name: DB_NAME  # Database name
+          value: "eduflex"  # Adjust as needed
+      - name: mysql
+        image: mysql:8.0  # Using the MySQL 8.0 image
+        ports:
+        - containerPort: 3306  # MySQL port
+        env:
+        - name: MYSQL_ROOT_PASSWORD  # MySQL root password
+          value: "root"  # Adjust as needed
+        - name: MYSQL_DATABASE  # Initial database to create
+          value: "eduflex"  # Adjust as needed
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eduflex-client-service
+spec:
+  type: NodePort  # Expose the client service externally
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30001  # NodePort to access the client service
+  selector:
+    app: eduflex
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eduflex-server-service
+spec:
+  type: ClusterIP  # Backend service only accessible within the cluster
+  ports:
+  - port: 5000
+    targetPort: 5000
+  selector:
+    app: eduflex
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  type: ClusterIP  # MySQL service only accessible within the cluster
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: eduflex
