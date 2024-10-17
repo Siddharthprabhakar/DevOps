@@ -26,7 +26,7 @@ pipeline {
                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
                 ]) {
                     // Run Terraform init, plan, and apply
-                    sh '''
+                    bat '''
                     terraform init
                     terraform plan
                     terraform apply -auto-approve
