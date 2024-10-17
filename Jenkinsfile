@@ -75,7 +75,9 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
-                    bat 'terraform apply --auto-approve'
+                    script {
+                        bat 'terraform apply --auto-approve -var="key_name=my-ec2-key"'
+                    }
                 }
             }
         }
