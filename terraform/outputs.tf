@@ -2,7 +2,7 @@
 
 output "instance_public_ip" {
   description = "The public IP of the EC2 instance"
-  value       = aws_instance.weduflex-app.public_ip
+  value       = aws_instance.eduflex-app.public_ip
 }
 
 output "instance_id" {
