@@ -34,15 +34,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Build Database') {
-            steps {
-                script {
-                    // Build database Docker image
-                    bat "docker build -t ${DOCKER_DATABASE_IMAGE}:${DOCKER_TAG}"
-                }
-            }
-        }
         
         stage('Login to DockerHub') {
             steps {
