@@ -5,6 +5,7 @@ pipeline {
         REPO_URL = 'https://github.com/Siddharthprabhakar/DevOps.git'  // Your GitHub repository URL
         DOCKER_FRONTEND_IMAGE = 'sujaykumar47/frontend-app'  // Docker image for frontend
         DOCKER_BACKEND_IMAGE = 'sujaykumar47/backend-app'  // Docker image for backend
+        DOCKER_DATABASE_IMAGE = 'sujaykumar47/database-app'  // Docker image for backend
         DOCKER_TAG = 'latest'
     }
 
@@ -33,7 +34,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Login to DockerHub') {
             steps {
                 script {
@@ -44,6 +45,7 @@ pipeline {
                 }
             }
         }
+        
 
         stage('Push Docker Images to DockerHub') {
             steps {
