@@ -1,9 +1,9 @@
 # main.tf
 
 resource "aws_instance" "eduflex_app" {
-  ami             = "ami-00f251754ac5da7f0"  # Amazon Linux 2 AMI
-  instance_type   = var.instance_type       # Variable for the instance type
-  key_name        = var.key_name            # Variable for the SSH key
+  ami           = "ami-0a2363a9cff180a64"  # Amazon Linux 2 in ap-southeast-2
+  instance_type = "t2.micro"
+  key_name = "your-ec2-key-name"
 
   user_data = file("userdata.sh") 
 
