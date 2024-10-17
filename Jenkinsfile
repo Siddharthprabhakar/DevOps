@@ -5,7 +5,6 @@ pipeline {
         REPO_URL = 'https://github.com/Siddharthprabhakar/DevOps.git'  // Your GitHub repository URL
         DOCKER_FRONTEND_IMAGE = 'sujaykumar47/frontend-app'  // Docker image for frontend
         DOCKER_BACKEND_IMAGE = 'sujaykumar47/backend-app'  // Docker image for backend
-        DOCKER_DATABASE_IMAGE = 'sujaykumar47/database-app'  // Docker image for backend
         DOCKER_TAG = 'latest'
     }
 
@@ -34,7 +33,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Login to DockerHub') {
             steps {
                 script {
@@ -45,7 +44,6 @@ pipeline {
                 }
             }
         }
-        
 
         stage('Push Docker Images to DockerHub') {
             steps {
@@ -62,34 +60,6 @@ pipeline {
                 script {
                     // Logout from Docker Hub
                     bat 'docker logout'
-                }
-            }
-        }
-
-        stage('Checkout') {
-            steps {
-                git branch: 'main', credentialsId: 'b2f3d3dd-0852-4f33-8831-88cbf4dbddca', url: 'https://github.com/Siddharthprabhakar/DevOps'
-            }
-        }
-        
-        stage('Terraform Init') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform init'
-                }
-            }
-        }
-        stage('Terraform Plan') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform plan'
-                }
-            }
-        }
-        stage('Terraform Apply') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform apply --auto-approve'
                 }
             }
         }
