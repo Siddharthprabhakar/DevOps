@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'AWS_REGION'
+        AWS_REGION = 'ap-south-1'  // Set your desired AWS region
         TF_VAR_instance_type = 't2.medium'
         TF_VAR_key_name = 'my-keypair'
     }
@@ -10,19 +10,21 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                checkout scmGit(branches: [[name: 'main']], 
-                                userRemoteConfigs: [[url: 'https://github.com/Siddharthprabhakar/DevOps']])
+                script {
+                    // Checkout the repository containing Terraform files
+                    checkout scm
+                }
             }
         }
 
         stage('Set up AWS Credentials') {
             steps {
-                withCredentials([[ 
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]]) {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding',
+                     credentialsId: 'aws-credentials-terraform',
+                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
+                ]) {
                     // Run Terraform init, plan, and apply
                     sh '''
                     terraform init
@@ -40,3 +42,4 @@ pipeline {
         }
     }
 }
+
