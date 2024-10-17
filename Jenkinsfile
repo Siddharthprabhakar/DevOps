@@ -27,6 +27,7 @@ pipeline {
                 ]) {
                     // Run Terraform init, plan, and apply
                     bat '''
+                    cd terraform
                     terraform init
                     terraform plan
                     terraform apply -auto-approve
