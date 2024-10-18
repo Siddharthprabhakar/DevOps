@@ -55,56 +55,6 @@ pipeline {
             }
         }
 
-        stage('Verify AWS Configuration') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    bat 'aws sts get-caller-identity'
-                }
-            }
-        }
-
-        stage('Terraform Init') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    dir('terraform') {
-                        bat 'terraform init'
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    dir('terraform') {
-                        bat 'terraform plan -out=tfplan'
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    dir('terraform') {
-                        bat 'terraform apply -auto-approve tfplan'
-                    }
-                }
-            }
-        }
-
         stage('Logout from DockerHub') {
             steps {
                 script {
