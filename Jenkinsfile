@@ -3,8 +3,9 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/Siddharthprabhakar/DevOps.git'  // Your GitHub repository URL
-        DOCKER_FRONTEND_IMAGE = 'sujaykumar47/frontend-app'  // Docker image for frontend
-        DOCKER_BACKEND_IMAGE = 'sujaykumar47/backend-app'  // Docker image for backend
+        // DOCKER_FRONTEND_IMAGE = 'sujaykumar47/frontend-app'  // Docker image for frontend
+        // DOCKER_BACKEND_IMAGE = 'sujaykumar47/backend-app'  // Docker image for backend
+        DOCKER_WEBSITE_IMAGE = 'sujaykumar47/website'  // Docker image for website
         DOCKER_TAG = 'latest'
     }
 
@@ -16,23 +17,32 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
+        // stage('Build Frontend') {
+        //     steps {
+        //         script {
+        //             // Build frontend Docker image
+        //             bat "docker build -t ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG} ./client"
+        //         }
+        //     }
+        // }
+
+        stage('Build Website') {
             steps {
                 script {
-                    // Build frontend Docker image
-                    bat "docker build -t ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG} ./client"
+                    // Build Docker Compose file
+                    bat "docker-compose up --build"
                 }
             }
         }
 
-        stage('Build Backend') {
-            steps {
-                script {
-                    // Build backend Docker image
-                    bat "docker build -t ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG} ./server"
-                }
-            }
-        }
+        // stage('Build Backend') {
+        //     steps {
+        //         script {
+        //             // Build backend Docker image
+        //             bat "docker build -t ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG} ./server"
+        //         }
+        //     }
+        // }
 
         stage('Login to DockerHub') {
             steps {
@@ -49,8 +59,9 @@ pipeline {
             steps {
                 script {
                     // Push frontend and backend images to Docker HUB
-                    bat "docker push ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG}"
-                    bat "docker push ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG}"
+                    // bat "docker push ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG}"
+                    // bat "docker push ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG}"
+                    bat "docker push ${DOCKER_WEBSITE_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
