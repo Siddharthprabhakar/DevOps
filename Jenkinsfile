@@ -3,8 +3,9 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/Siddharthprabhakar/DevOps.git'  // Your GitHub repository URL
-        DOCKER_FRONTEND_IMAGE = 'sujaykumar47/frontend-app'  // Docker image for frontend
-        DOCKER_BACKEND_IMAGE = 'sujaykumar47/backend-app'  // Docker image for backend
+        // DOCKER_FRONTEND_IMAGE = 'sujaykumar47/frontend-app'  // Docker image for frontend
+        // DOCKER_BACKEND_IMAGE = 'sujaykumar47/backend-app'  // Docker image for backend
+        DOCKER_WEBSITE_IMAGE = 'sujaykumar47/website'  // Docker image for website
         DOCKER_TAG = 'latest'
     }
 
@@ -29,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Specify the context (directory) where the Dockerfile is located (e.g., '.')
-                    bat "docker build -t ${DOCKER_WEBSITE_IMAGE}:${DOCKER_TAG} ."
+                    bat "docker-compose -f docker-compose.yml build"
                 }
             }
         }
@@ -57,13 +58,13 @@ pipeline {
         stage('Push Docker Images to DockerHub') {
             steps {
                 script {
-                    // Push frontend and backend images to Docker Hub
-                    bat "docker tag client ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG}"
-                    bat "docker tag server ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG}"
-                    bat "docker push ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG}"
-                    bat "docker push ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG}"
+                    // Push frontend and backend images to Docker HUB
+                    // bat "docker push ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG}"
+                    // bat "docker push ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG}"
+                    bat "docker push ${DOCKER_WEBSITE_IMAGE}:${DOCKER_TAG}"
                 }
             }
+        }
 
         stage('Verify AWS Configuration') {
             steps {
