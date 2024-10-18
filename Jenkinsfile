@@ -16,23 +16,32 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
+        stage('Build') {
             steps {
                 script {
-                    // Build frontend Docker image
-                    bat "docker build -t ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG} ./client"
+                    // Build Docker images
+                    bat "docker-compose up --build"
                 }
             }
         }
 
-        stage('Build Backend') {
-            steps {
-                script {
-                    // Build backend Docker image
-                    bat "docker build -t ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG} ./server"
-                }
-            }
-        }
+        // stage('Build Frontend') {
+        //     steps {
+        //         script {
+        //             // Build frontend Docker image
+        //             bat "docker build -t ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG} ./client"
+        //         }
+        //     }
+        // }
+
+        // stage('Build Backend') {
+        //     steps {
+        //         script {
+        //             // Build backend Docker image
+        //             bat "docker build -t ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG} ./server"
+        //         }
+        //     }
+        // }
 
         stage('Login to DockerHub') {
             steps {
