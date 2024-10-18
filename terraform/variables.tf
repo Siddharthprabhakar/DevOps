@@ -2,7 +2,7 @@
 
 variable "instance_type" {
   description = "The type of EC2 instance to create"
-  default     = "t2.medium"  # Instance size
+  default     = "t2.micro"  # Instance size
 }
 
 variable "frontend_docker_image" {

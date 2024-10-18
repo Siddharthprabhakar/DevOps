@@ -12,6 +12,15 @@ sudo usermod -a -G docker ec2-user  # Add the ec2-user to the docker group
 # Enable Docker to start on boot
 sudo systemctl enable docker
 
+# Set Docker to listen on TCP port 2375
+sudo mkdir -p /etc/systemd/system/docker.service.d
+echo -e "[Service]\nExecStart=\nExecStart=/usr/bin/dockerd --host=tcp://0.0.0.0:2375" | sudo tee /etc/systemd/system/docker.service.d/override.conf
+
+# Reload systemd and restart Docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+
 # Install Docker Compose
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
