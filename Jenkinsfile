@@ -16,32 +16,23 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Frontend') {
             steps {
                 script {
-                    // Build Docker images
-                    bat "docker-compose up --build"
+                    // Build frontend Docker image
+                    bat "docker build -t ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG} ./client"
                 }
             }
         }
 
-        // stage('Build Frontend') {
-        //     steps {
-        //         script {
-        //             // Build frontend Docker image
-        //             bat "docker build -t ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG} ./client"
-        //         }
-        //     }
-        // }
-
-        // stage('Build Backend') {
-        //     steps {
-        //         script {
-        //             // Build backend Docker image
-        //             bat "docker build -t ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG} ./server"
-        //         }
-        //     }
-        // }
+        stage('Build Backend') {
+            steps {
+                script {
+                    // Build backend Docker image
+                    bat "docker build -t ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG} ./server"
+                }
+            }
+        }
 
         stage('Login to DockerHub') {
             steps {
@@ -60,56 +51,6 @@ pipeline {
                     // Push frontend and backend images to Docker Hub
                     bat "docker push ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG}"
                     bat "docker push ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG}"
-                }
-            }
-        }
-
-        stage('Verify AWS Configuration') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    bat 'aws sts get-caller-identity'
-                }
-            }
-        }
-
-        stage('Terraform Init') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    dir('terraform') {
-                        bat 'terraform init'
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    dir('terraform') {
-                        bat 'terraform plan -out=tfplan'
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-credentials-terraform'
-                ]]) {
-                    dir('terraform') {
-                        bat 'terraform apply -auto-approve tfplan'
-                    }
                 }
             }
         }
