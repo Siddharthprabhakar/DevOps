@@ -79,7 +79,7 @@ pipeline {
             }
         }
 
-        stage('Terraform Plan and Terraform Apply') {
+        stage('Terraform Plan') {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
@@ -92,18 +92,18 @@ pipeline {
             }
         }
 
-        // stage('Terraform Apply') {
-        //     steps {
-        //         withCredentials([[
-        //             $class: 'AmazonWebServicesCredentialsBinding',
-        //             credentialsId: 'aws-credentials-terraform'
-        //         ]]) {
-        //             dir('terraform') {
-        //                 bat 'terraform apply -auto-approve tfplan'
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Terraform Apply') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-terraform'
+                ]]) {
+                    dir('terraform') {
+                        bat 'terraform apply -auto-approve tfplan'
+                    }
+                }
+            }
+        }
 
         stage('Logout from DockerHub') {
             steps {
