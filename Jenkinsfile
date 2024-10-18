@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clone the repository from GitHub
+                // Clone the repository from 
                 git branch: 'main', url: "${REPO_URL}"
             }
         }
@@ -48,38 +48,58 @@ pipeline {
         stage('Push Docker Images to DockerHub') {
             steps {
                 script {
-                    // Push frontend and backend images to Docker Hub
+                    // Push frontend and backend images to Docker HUB
                     bat "docker push ${DOCKER_FRONTEND_IMAGE}:${DOCKER_TAG}"
                     bat "docker push ${DOCKER_BACKEND_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
 
+        stage('Verify AWS Configuration') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-terraform'
+                ]]) {
+                    bat 'aws sts get-caller-identity'
+                }
+            }
+        }
+
         stage('Terraform Init') {
             steps {
-                dir('terraform') {
-                    bat 'terraform init'
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-terraform'
+                ]]) {
+                    dir('terraform') {
+                        bat 'terraform init'
+                    }
                 }
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                script {
-                    // Change directory to the terraform folder
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-terraform'
+                ]]) {
                     dir('terraform') {
-                        // Run Terraform Plan
-                        bat 'terraform plan'
+                        bat 'terraform plan -out=tfplan'
                     }
                 }
             }
         }
-        
+
         stage('Terraform Apply') {
             steps {
-                dir('terraform') {
-                    script {
-                        bat 'terraform apply --auto-approve'
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-terraform'
+                ]]) {
+                    dir('terraform') {
+                        bat 'terraform apply -auto-approve tfplan'
                     }
                 }
             }
