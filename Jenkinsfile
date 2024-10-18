@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker Compose file
-                    bat "docker-compose up --build"
+                    bat "docker build -t ${DOCKER_WEBSITE_IMAGE}:${DOCKER_TAG} "
                 }
             }
         }
