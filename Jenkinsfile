@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     // Specify the context (directory) where the Dockerfile is located (e.g., '.')
-                    bat "docker-compose -f docker-compose.yml build"
+                    bat "docker build -t ${DOCKER_WEBSITE_IMAGE}:${DOCKER_TAG} ."
                 }
             }
         }
