@@ -4,6 +4,9 @@
 # Update all packages
 sudo yum update -y
 
+# Install Git
+sudo yum install git -y  # Add this line to install Git
+
 # Install Docker
 sudo amazon-linux-extras install docker -y
 sudo service docker start
